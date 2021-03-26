@@ -112,7 +112,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
 var onClickLogo = function onClickLogo() {
-  window.location = 'https://openblock.github.io/wiki/';
+  window.location = 'https://openblockcc.github.io/wiki/';
 };
 
 var handleTelemetryModalCancel = function handleTelemetryModalCancel() {
