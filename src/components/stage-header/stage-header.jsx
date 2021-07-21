@@ -71,7 +71,7 @@ const StageHeaderComponent = function (props) {
         const stageButton = showBranding ? (
             <div className={styles.embedScratchLogo}>
                 <a
-                    href="https://openblock.cc"
+                    href="#"
                     rel="noopener noreferrer"
                     target="_blank"
                 >
