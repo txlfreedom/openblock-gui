@@ -22,7 +22,8 @@ const messages = defineMessages({
 const ProjectTitleInput = ({
     className,
     intl,
-    onSubmit
+    onSubmit,
+    projectTitle
 }) => (
     <BufferedInput
         className={classNames(styles.titleField, className)}
