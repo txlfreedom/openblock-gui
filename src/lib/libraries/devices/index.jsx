@@ -48,6 +48,10 @@ import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
 import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg';
 
+import unoCoreIconURL from './unoCore/unoCore.png';
+import unoCoreConnectionIconURL from './unoCore/unoCore-illustration.svg';
+import unoCoreConnectionSmallIconURL from './unoCore/unoCore-small.svg';
+
 const deviceData = [
     /**
      * Unselect the deivce back to pure scratch mode
@@ -76,6 +80,43 @@ const deviceData = [
         tags: ['realtime']
     },
     {
+        name: 'UnoCore',
+        deviceId: 'unoCore',
+        manufactor: 'D.D.Magic',
+        leanMore: '',
+        type: 'arduino',
+        iconURL: unoCoreIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="UnoCore is a programmable control host based on ATMEGA328P master, with electronic extensions of Arduino and mechanical interest combined with Lego."
+                description="Description for the unoCore device"
+                id="gui.device.unoCore.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: unoCoreConnectionIconURL,
+        connectionSmallIconURL: unoCoreConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their arduino."
+                id="gui.device.arduino.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['arduino'],
+        helpLink: ''
+    },
+	{
         name: 'Arduino Uno',
         deviceId: 'arduinoUno',
         manufactor: 'arduino.cc',
