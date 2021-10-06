@@ -61,7 +61,6 @@ class Blocks extends React.Component {
             'handleCategorySelected',
             'handleConnectionModalStart',
             'handleDeviceAdded',
-            'handleDeviceChanged',
             'handleDeviceExtensionAdded',
             'handleDeviceExtensionRemoved',
             'handleDeviceSelected',
@@ -175,10 +174,6 @@ class Blocks extends React.Component {
 
         // If program mode changed, call functio to update the toolbox
         if (this.props.isRealtimeMode !== this._programMode) {
-            if (this.props.isRealtimeMode === false) {
-                // Do not update code before toolbox is updated.
-                this._toolboxUpdating = true;
-            }
             // Clear possible errors witch print in to code editor.
             this.props.onSetCodeEditorValue('');
             this.onProgramModeUpdate();
@@ -256,8 +251,6 @@ class Blocks extends React.Component {
         const offset = this.workspace.toolbox_.getCategoryScrollOffset();
         this.workspace.updateToolbox(this.props.toolboxXML);
         this._renderedToolboxXML = this.props.toolboxXML;
-
-        this._toolboxUpdating = false;
 
         // In order to catch any changes that mutate the toolbox during "normal runtime"
         // (variable changes/etc), re-enable toolbox refresh.
@@ -407,7 +400,8 @@ class Blocks extends React.Component {
                 stageCostumes[stageCostumes.length - 1].name,
                 targetSounds.length > 0 ? targetSounds[targetSounds.length - 1].name : ''
             );
-        } catch {
+        } catch (error) {
+            log.warn(error);
             return null;
         }
     }
@@ -584,10 +578,16 @@ class Blocks extends React.Component {
             this.props.updateToolboxState(toolboxXML);
         }
     }
-    handleDeviceExtensionAdded (addExts) {
-        this.ScratchBlocks = addExts.addMsg(this.ScratchBlocks);
-        this.ScratchBlocks = addExts.addGenerator(this.ScratchBlocks);
-        this.ScratchBlocks = addExts.addBlocks(this.ScratchBlocks);
+    handleDeviceExtensionAdded (deviceExtensionsRegister) {
+        if (deviceExtensionsRegister.addMsg) {
+            this.ScratchBlocks = deviceExtensionsRegister.addMsg(this.ScratchBlocks);
+        }
+        if (deviceExtensionsRegister.addGenerator) {
+            this.ScratchBlocks = deviceExtensionsRegister.addGenerator(this.ScratchBlocks);
+        }
+        if (deviceExtensionsRegister.addBlocks) {
+            this.ScratchBlocks = deviceExtensionsRegister.addBlocks(this.ScratchBlocks);
+        }
 
         this.setLocale();
 
@@ -626,11 +626,6 @@ class Blocks extends React.Component {
         this.withToolboxUpdates(() => {
             this.workspace.toolbox_.setSelectedCategoryById(categoryId);
         });
-    }
-    handleDeviceChanged () {
-        if (this.props.peripheralName) {
-            this.props.vm.disconnectPeripheral(this.props.deviceId);
-        }
     }
     setBlocks (blocks) {
         this.blocks = blocks;
@@ -672,7 +667,7 @@ class Blocks extends React.Component {
         this.props.onToolboxDidUpdate();
     }
     handleCodeNeedUpdate () {
-        if (this._toolboxUpdating !== true && this.props.isRealtimeMode === false) {
+        if (this.props.isRealtimeMode === false) {
             this.props.onSetCodeEditorValue(this.workspaceToCode());
         }
     }
@@ -772,7 +767,6 @@ class Blocks extends React.Component {
                     <DeviceLibrary
                         vm={vm}
                         onDeviceSelected={this.handleDeviceSelected}
-                        onDeviceChanged={this.handleDeviceChanged}
                         onRequestClose={onRequestCloseDeviceLibrary}
                     />
                 ) : null}

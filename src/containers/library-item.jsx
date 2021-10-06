@@ -11,7 +11,7 @@ class LibraryItem extends React.PureComponent {
         bindAll(this, [
             'handleBlur',
             'handleClick',
-            'handleClickLeanMore',
+            'handleClickLearnMore',
             'handleFocus',
             'handleKeyPress',
             'handleMouseEnter',
@@ -22,6 +22,7 @@ class LibraryItem extends React.PureComponent {
             'startRotatingIcons',
             'stopRotatingIcons'
         ]);
+        this.hasIconsArray = Array.isArray(props.icons);
         this.state = {
             iconIndex: 0,
             isRotatingIcon: false,
@@ -54,7 +55,7 @@ class LibraryItem extends React.PureComponent {
         }
         e.preventDefault();
     }
-    handleClickLeanMore (e) {
+    handleClickLearnMore (e) {
         e.stopPropagation();
     }
     handleFocus (id) {
@@ -72,7 +73,7 @@ class LibraryItem extends React.PureComponent {
         // only show hover effects on the item if not showing a play button
         if (!this.props.showPlayButton) {
             this.props.onMouseEnter(this.props.id);
-            if (this.props.icons && this.props.icons.length) {
+            if (this.hasIconsArray) {
                 this.stopRotatingIcons();
                 this.setState({
                     isRotatingIcon: true
@@ -84,7 +85,7 @@ class LibraryItem extends React.PureComponent {
         // only show hover effects on the item if not showing a play button
         if (!this.props.showPlayButton) {
             this.props.onMouseLeave(this.props.id);
-            if (this.props.icons && this.props.icons.length) {
+            if (this.hasIconsArray) {
                 this.setState({
                     isRotatingIcon: false
                 }, this.stopRotatingIcons);
@@ -110,27 +111,22 @@ class LibraryItem extends React.PureComponent {
         const nextIconIndex = (this.state.iconIndex + 1) % this.props.icons.length;
         this.setState({iconIndex: nextIconIndex});
     }
-    curIconMd5 () {
-        const iconMd5Prop = this.props.iconMd5;
-        if (this.props.icons &&
-            this.state.isRotatingIcon &&
-            this.state.iconIndex < this.props.icons.length) {
-            const icon = this.props.icons[this.state.iconIndex] || {};
-            return icon.md5ext || // 3.0 library format
-                icon.baseLayerMD5 || // 2.0 library format, TODO GH-5084
-                iconMd5Prop;
+    curIconSource () {
+        if (this.hasIconsArray) {
+            if (this.state.isRotatingIcon &&
+                this.state.iconIndex < this.props.icons.length &&
+                this.props.icons[this.state.iconIndex]) {
+                // multiple icons, currently animating: show current frame
+                return this.props.icons[this.state.iconIndex];
+            }
+            // multiple icons, not currently animating: show first frame
+            return this.props.icons[0];
         }
-        return iconMd5Prop;
+        // single icon
+        return this.props.icons;
     }
     render () {
-        const iconMd5 = this.curIconMd5();
-        const iconURL = iconMd5 ?
-            // `https://cdn.assets.scratch.mit.edu/internalapi/asset/${iconMd5}/get/` :
-            // `./static/asset/${iconMd5}` :
-            // `http://39.105.42.68:8080/static/asset/${iconMd5}` :
-            `../../resources/statics/assets/${iconMd5}` :
-
-            this.props.iconRawURL;
+        const iconSource = this.curIconSource();
         return (
             <LibraryItemComponent
                 author={this.props.author}
@@ -144,8 +140,7 @@ class LibraryItem extends React.PureComponent {
                 featured={this.props.featured}
                 helpLink={this.props.helpLink}
                 hidden={this.props.hidden}
-                iconURL={iconURL}
-                icons={this.props.icons}
+                iconSource={iconSource}
                 id={this.props.id}
                 insetIconURL={this.props.insetIconURL}
                 internetConnectionRequired={this.props.internetConnectionRequired}
@@ -153,13 +148,13 @@ class LibraryItem extends React.PureComponent {
                 isUnloadble={this.props.isUnloadble}
                 isPlaying={this.props.isPlaying}
                 isProcessing={this.state.isProcessing}
-                leanMore={this.props.leanMore}
+                learnMore={this.props.learnMore}
                 manufactor={this.props.manufactor}
                 name={this.props.name}
                 showPlayButton={this.props.showPlayButton}
                 onBlur={this.handleBlur}
                 onClick={this.handleClick}
-                onClickLeanMore={this.handleClickLeanMore}
+                onClickLearnMore={this.handleClickLearnMore}
                 onFocus={this.handleFocus}
                 onKeyPress={this.handleKeyPress}
                 onMouseEnter={this.handleMouseEnter}
@@ -189,21 +184,17 @@ LibraryItem.propTypes = {
     featured: PropTypes.bool,
     helpLink: PropTypes.string,
     hidden: PropTypes.bool,
-    iconMd5: PropTypes.string,
-    iconRawURL: PropTypes.string,
-    icons: PropTypes.arrayOf(
-        PropTypes.shape({
-            baseLayerMD5: PropTypes.string, // 2.0 library format, TODO GH-5084
-            md5ext: PropTypes.string // 3.0 library format
-        })
-    ),
+    icons: PropTypes.oneOfType([
+        LibraryItemComponent.propTypes.iconSource, // single icon
+        PropTypes.arrayOf(LibraryItemComponent.propTypes.iconSource) // rotating icons
+    ]),
     id: PropTypes.number.isRequired,
     insetIconURL: PropTypes.string,
     internetConnectionRequired: PropTypes.bool,
     isLoaded: PropTypes.bool,
     isUnloadble: PropTypes.bool,
     isPlaying: PropTypes.bool,
-    leanMore: PropTypes.string,
+    learnMore: PropTypes.string,
     manufactor: PropTypes.string,
     name: PropTypes.oneOfType([
         PropTypes.string,

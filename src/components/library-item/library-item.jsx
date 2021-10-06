@@ -4,6 +4,7 @@ import React from 'react';
 
 import Box from '../box/box.jsx';
 import PlayButton from '../../containers/play-button.jsx';
+import ScratchImage from '../scratch-image/scratch-image.jsx';
 import styles from './library-item.css';
 import classNames from 'classnames';
 
@@ -45,10 +46,12 @@ class LibraryItemComponent extends React.PureComponent {
                             />
                         </div>
                     ) : null}
-                    <img
-                        className={styles.featuredImage}
-                        src={this.props.iconURL}
-                    />
+                    {this.props.iconSource ? (
+                        <ScratchImage
+                            className={styles.featuredImage}
+                            imageSource={this.props.iconSource}
+                        />
+                    ) : null}
                 </div>
                 {this.props.insetIconURL ? (
                     <div className={styles.libraryItemInsetImageContainer}>
@@ -65,10 +68,10 @@ class LibraryItemComponent extends React.PureComponent {
                 >
                     <a
                         className={styles.libraryItemName}
-                        href={this.props.leanMore}
+                        href={this.props.learnMore}
                         rel="noopener noreferrer"
                         target="_blank"
-                        onClick={this.props.onClickLeanMore ? this.props.onClickLeanMore : null}
+                        onClick={this.props.onClickLearnMore ? this.props.onClickLearnMore : null}
                     >
                         {this.props.name}
                     </a>
@@ -237,15 +240,15 @@ class LibraryItemComponent extends React.PureComponent {
                         </div>
                     </div>
                 ) : null}
-                {this.props.leanMore || this.props.helpLink ? (
+                {this.props.learnMore || this.props.helpLink ? (
                     <div className={styles.featuredExtensionMetadataThirdRow}>
-                        {this.props.leanMore ? (
-                            <div className={styles.featuredExtensionLeanMore}>
+                        {this.props.learnMore ? (
+                            <div className={styles.featuredExtensionLearnMore}>
                                 <a
-                                    href={this.props.leanMore}
+                                    href={this.props.learnMore}
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    onClick={this.props.onClickLeanMore}
+                                    onClick={this.props.onClickLearnMore}
                                 >
                                     <FormattedMessage
                                         defaultMessage="Learn more"
@@ -261,7 +264,7 @@ class LibraryItemComponent extends React.PureComponent {
                                     href={this.props.helpLink}
                                     rel="noopener noreferrer"
                                     target="_blank"
-                                    onClick={this.props.onClickLeanMore}
+                                    onClick={this.props.onClickLearnMore}
                                 >
                                     <FormattedMessage
                                         defaultMessage="Help"
@@ -338,9 +341,9 @@ class LibraryItemComponent extends React.PureComponent {
                         onMouseEnter={this.props.showPlayButton ? this.props.onMouseEnter : null}
                         onMouseLeave={this.props.showPlayButton ? this.props.onMouseLeave : null}
                     >
-                        <img
+                        <ScratchImage
                             className={styles.libraryItemImage}
-                            src={this.props.iconURL}
+                            imageSource={this.props.iconSource}
                         />
                     </Box>
                 </Box>
@@ -373,14 +376,14 @@ LibraryItemComponent.propTypes = {
     featured: PropTypes.bool,
     helpLink: PropTypes.string,
     hidden: PropTypes.bool,
-    iconURL: PropTypes.string,
+    iconSource: ScratchImage.ImageSourcePropType,
     insetIconURL: PropTypes.string,
     internetConnectionRequired: PropTypes.bool,
     isLoaded: PropTypes.bool,
     isUnloadble: PropTypes.bool,
     isPlaying: PropTypes.bool,
     isProcessing: PropTypes.bool,
-    leanMore: PropTypes.string,
+    learnMore: PropTypes.string,
     manufactor: PropTypes.string,
     name: PropTypes.oneOfType([
         PropTypes.string,
@@ -388,7 +391,7 @@ LibraryItemComponent.propTypes = {
     ]),
     onBlur: PropTypes.func.isRequired,
     onClick: PropTypes.func.isRequired,
-    onClickLeanMore: PropTypes.func.isRequired,
+    onClickLearnMore: PropTypes.func.isRequired,
     onFocus: PropTypes.func.isRequired,
     onKeyPress: PropTypes.func.isRequired,
     onMouseEnter: PropTypes.func.isRequired,
