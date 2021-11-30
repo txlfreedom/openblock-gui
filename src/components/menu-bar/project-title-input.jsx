@@ -22,7 +22,8 @@ const messages = defineMessages({
 const ProjectTitleInput = ({
     className,
     intl,
-    onSubmit
+    onSubmit,
+    projectTitle
 }) => (
     <BufferedInput
         className={classNames(styles.titleField, className)}
@@ -30,6 +31,7 @@ const ProjectTitleInput = ({
         placeholder={intl.formatMessage(messages.projectTitlePlaceholder)}
         tabIndex="0"
         type="text"
+        value={projectTitle}
         onSubmit={onSubmit}
     />
 );

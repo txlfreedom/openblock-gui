@@ -199,6 +199,11 @@ class LibraryComponent extends React.Component {
                             dataItem.name : this.props.intl.formatMessage(dataItem.name.props)
                         ).toLowerCase() :
                         null)
+                    .concat(dataItem.description ?
+                        (typeof dataItem.description === 'string' ?
+                            dataItem.description : this.props.intl.formatMessage(dataItem.description.props)
+                        ).toLowerCase() :
+                        null)
                     .join('\n') // unlikely to partially match newlines
                     .indexOf(this.state.filterQuery.toLowerCase()) !== -1
             ));
