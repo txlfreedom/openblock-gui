@@ -51,6 +51,11 @@ import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg'
 import unoCoreIconURL from './unoCore/unoCore.png';
 import unoCoreConnectionIconURL from './unoCore/unoCore-illustration.svg';
 import unoCoreConnectionSmallIconURL from './unoCore/unoCore-small.svg';
+
+import unoStartIconURL from './unoStart/unoStart.png';
+import unoStartConnectionIconURL from './unoStart/unoStart-illustration.svg';
+import unoStartConnectionSmallIconURL from './unoStart/unoStart-small.svg';
+
 const deviceData = [
     /**
      * Unselect the deivce back to pure scratch mode
@@ -111,6 +116,43 @@ const deviceData = [
         ),
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
+        programLanguage: ['block', 'c', 'cpp'],
+        tags: ['arduino'],
+        helpLink: ''
+    },
+    {
+        name: 'unoStart',
+        deviceId: 'unoStart',
+        manufactor: 'D.D.Magic',
+        leanMore: '',
+        type: 'arduino',
+        iconURL: unoStartIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="unoStart is a programmable control host based on ATMEGA328P master, with electronic extensions of Arduino and mechanical interest combined with Lego."
+                description="Description for the unoStart device"
+                id="gui.device.unoStart.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '9600',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: unoStartConnectionIconURL,
+        connectionSmallIconURL: unoStartConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their arduino."
+                id="gui.device.arduino.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: arduinoBaseToolBox,
+        programMode: ['realtime','upload'],
         programLanguage: ['block', 'c', 'cpp'],
         tags: ['arduino'],
         helpLink: ''
